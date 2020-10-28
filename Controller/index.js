@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.post('/signup',(req,res) => {
 const newUser = new adminModel({
-      role: "user",
+      role: "admin",
       email: req.body.email,
       password: req.body.password
 });
