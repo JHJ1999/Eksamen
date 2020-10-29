@@ -21,8 +21,16 @@
 
 
 <div class="adminlogin">
-    <form name="form" method="POST" action="http://localhost:3000/signup" role="form" enctype="application/x-www-form-urlencoded">
+    <form name="form" method="POST" action="http://localhost:3000/login" role="form" enctype="application/json">
     <h1>Admin Login</h1>
+    <b> Login som admin, eller allerede eksisterende bruger</b>
+    <br>
+
+    <input id="rb1" name="role" type="radio" value="admin"><b>Admin</b></input> 
+    <input rd="rb2" name="role" type="radio" value="user"><b>Bruger</b></input> 
+    <!--kalder radio-buttons samme navn, så kun en kan vælges (men forskellige ID's-->
+    <br>
+
     <label for="email"><b>Email</b></label>    
     <input type="email" placeholder="Enter Email" name="email">
 
@@ -33,14 +41,15 @@
 
     <br>
 
-    <label for="button">opret bruger</label>
+    <label for="button"><b>Login</b></label>
     <input type="submit" name="button">
 
 
     </form>
     </div>
 
-<div class="userlogin">
+<div class="userSignup">
+    <form name="form" method="POST" action="http://localhost:3000/signup" role="form" enctype="application/json">
     <h1>User Create Profile</h1>
 
     <label for="fullName"><b>FullName</b></label>
@@ -65,7 +74,7 @@
 
     <label for="gender"><b>Gender</b></label>
 
-    <select name="Gender" id="gender">
+    <select name="gender" id="gender">
 
         <option value="Select">Select</option>
         <option value="Male">Male</option>
@@ -76,9 +85,9 @@
 
     <br>
 
-    <label for="prefferedGender"><b> Preffered Gender</b></label>
+    <label for="preferredGender"><b> Preferred Gender</b></label>
 
-    <select name="prefferedGender" id="prefferedGender">
+    <select name="preferredGender" id="preferredGender">
 
         <option value="Select">Select</option>
         <option value="Male">Male</option>
@@ -95,20 +104,21 @@
 
     <br>
 
-    <label for="button"></label>
-    <button type="button" onclick=""> Create Account</button>
+    <label for="button"><b>Opret Profil</b></label>
+    <input type="submit" name="button2">
 
+
+    </form>
     </div>
     
 </div>
 
     
 <footer>
-    bar
 </footer>
 
 </body>
 
 
-<script></script>
+<script src="app.js"></script>
 </html>

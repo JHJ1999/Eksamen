@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     age: Number,
     gender: String,
     preferredGender: String,
-    interrest: [String],
+    interest: [String],
 })
 
 const userModel = mongoose.model('User', userSchema);
