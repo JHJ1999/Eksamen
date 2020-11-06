@@ -17,12 +17,31 @@
 
     <div class="left">
         
-        <b>Min Profil</b>
+        <% if (user) { %>
+            <h2 id="username"> Navn: <%=user.name%> </h2>
+        
         <br>
-        <b>Rediger</b>
-        <b></b>
-
-
+        <ul>
+        
+            <li> Email: <%=user.email%> </li>
+        
+        <br>
+        
+            <li> Alder: <%=user.age%> </li>
+        
+        <br>
+        
+            <li> Køn: <%=user.gender%> </li>
+        
+        <br>
+        
+            <li> Foretrukket køn: <%=user.preferredGender%> </li>
+        
+        <br>
+        
+            <li> Interesser: <%=user.interest%> </li>
+        <% } %>
+        </ul>
     </div>
 
 

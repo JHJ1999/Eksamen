@@ -3,10 +3,8 @@ const cors = require('cors');
 const app = express(); // benytter express
 const port = 3000
 const mongoose = require('mongoose');
-const adminModel = require("./Model/Admin");
 const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
-const { request } = require('express');
 const ejs = require('ejs');
 
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,8 +28,6 @@ app.get('/', function(req, res) {
 
 
 
-
-
 app.post('/signup', (req, res) => {
   const newUser = new userModel({
     role: "user",
@@ -48,23 +44,31 @@ app.post('/signup', (req, res) => {
     .then(user =>{
 
     if(user)
-    {res.status(200).render("homepage.ejs"); // redirect til homepage html fil 
+    {res.status(200).render("homepage.ejs", {user: user}); // redirect til homepage html fil 
   }
   })
     .catch(err =>
     res.status(500).json({error: err}));
 });
 
-//tjekke for admin også
+
 app.post('/login', (req,res) => {
   if(req.body!=null){
     userModel.find({email:req.body.email})
     .then(users => {
       if(users.length < 1){
         res.send("No user found");
-      }
-      if(users[0].role==req.body.role){
-        res.status(200).json({message: "succes" + "role:" + users[0].role})
+      } // tjekker om det er admin- eller user login 
+      if(users[0].role==req.body.role && users[0].password==req.body.password){
+        if(users[0].role == "admin") {
+          res.status(200).render("admin.ejs", {admin: users[0]});
+        } else if (users[0].role == "user") {
+          res.status(200).render("homepage.ejs", {user: users[0]});
+        } else {
+          res.status(200).json(users[0]);
+
+        }
+       
       } else {
         res.status(403).json({message: "unauthorised"})
       }
