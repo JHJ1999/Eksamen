@@ -7,6 +7,7 @@ const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 
+
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -19,7 +20,7 @@ console.log("database connected");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({urlencoded: true}));
-app.use(express.static("./Views/")); // for at hente css til view engine 
+app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine 
 app.set("view-engine", "ejs"); //sætter view engine til ejs
 //henter html - måske gøre det samme for logget ind!
 app.get('/', function(req, res) {
@@ -27,6 +28,17 @@ app.get('/', function(req, res) {
 }); //henter min index fil
 
 
+app.get("/admin", function(req,res){
+  userModel.find({role: "user"})
+      .then(user => {
+          res.status(200).json(user);
+      })
+      .catch( err => {
+          res.status(500).json({
+              error: err
+          });
+      });
+});
 
 app.post('/signup', (req, res) => {
   const newUser = new userModel({
@@ -61,19 +73,30 @@ app.post('/login', (req,res) => {
       } // tjekker om det er admin- eller user login 
       if(users[0].role==req.body.role && users[0].password==req.body.password){
         if(users[0].role == "admin") {
-          res.status(200).render("admin.ejs", {admin: users[0]});
-        } else if (users[0].role == "user") {
-          res.status(200).render("homepage.ejs", {user: users[0]});
-        } else {
-          res.status(200).json(users[0]);
+          userModel.find({role: "user"}) //henter liste af users til admin side
+          .then(allUsers => {
+            res.status(200).render("admin.ejs", {admin: users[0], allUsers: allUsers});
+          })
+          .catch( err => {
+            res.status(500).json({
+                error: err
+          })
+      });
+      }
 
+      else if (users[0].role == "user") {
+          res.status(200).render("homepage.ejs", {user: users[0]});
+      } 
+        else {
+          res.status(200).json(users[0]);
         }
        
-      } else {
+      } 
+        else {
         res.status(403).json({message: "unauthorised"})
-      }
+        }
     })
-    .catch(err => {
+        .catch(err => {
       if (err){
         res.status(500).json({error: err})
       } else {
