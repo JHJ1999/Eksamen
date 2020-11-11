@@ -18,18 +18,30 @@
     <div class="left">
 
         <% if (admin) { %>
-            <h2> <%=admin.email%> </h2>
+            <h2> Email: <%=admin.email%> </h2>
         <% } %>
         
-        <b>Alle Profiler</b>
+        <h3>Alle Profiler</h3>
         <% if (allUsers) { %>
             <h2> <%=allUsers%> </h2>
         <% } %>
         
         <br>
-        <b>Rediger</b>
-        <br>
-        <b>Slet</b>
+        <% function editUser() { %>
+            <%  %>
+        
+          <% } %>
+        <button id="rediger">Rediger bruger</button>
+        
+        <% function deleteUser() { %>
+            <%  %>
+        
+          <% } %>
+        <button id="slet">Slet bruger</button>
+       
+
+
+        <button id="logOut" onclick="location.href='http://localhost:3000/'">Log ud</button>
 
 
     </div>

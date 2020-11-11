@@ -40,8 +40,27 @@
         <br>
         
             <li> Interesser: <%=user.interest%> </li>
-        <% } %>
+        
+       
         </ul>
+        <br>
+        
+        <% function editUser() { %>
+            <%  %>
+        
+          <% } %>
+        <button id="rediger">Rediger bruger</button>
+        
+        <form name="delete" action="http://localhost:3000/delete" role="form" method="POST" >
+            <input type="text" name="id" value='<%- user._id %>' style="display: none;">
+        <input type="submit" value="Slet bruger" id="slet">
+        </form>
+        
+        <% } %>
+        
+        
+        <button id="logOut" onclick="location.href='http://localhost:3000/'">Log ud</button>
+        
     </div>
 
 

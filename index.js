@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const ejs = require('ejs');
 
 
-mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -28,6 +28,7 @@ app.get('/', function(req, res) {
 }); //henter min index fil
 
 
+//finder alle users - test
 app.get("/admin", function(req,res){
   userModel.find({role: "user"})
       .then(user => {
@@ -42,6 +43,7 @@ app.get("/admin", function(req,res){
 
 app.post('/signup', (req, res) => {
   const newUser = new userModel({
+    _id: mongoose.Types.ObjectId(),
     role: "user",
     name: req.body.name,
     email: req.body.email,
@@ -62,6 +64,17 @@ app.post('/signup', (req, res) => {
     .catch(err =>
     res.status(500).json({error: err}));
 });
+
+app.post('/delete', (req,res) => {
+   userModel
+    .findByIdAndRemove(req.body.id)
+    .exec()
+    .then(doc => {
+    if (!doc) {return res.status(404).end(); }
+    return res.status(200).render("index.ejs");
+    })   //ellers 204.end()
+    .catch(err => next(err));
+})
 
 
 app.post('/login', (req,res) => {
