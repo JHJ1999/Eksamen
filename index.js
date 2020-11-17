@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
+const { findOneAndUpdate, update } = require('./Model/User');
 
 
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
@@ -76,6 +77,19 @@ app.post('/delete', (req,res) => {
     .catch(err => next(err));
 })
 
+
+app.post('/update', (req,res) => {
+  var conditions = { _id: req.params.id };
+  
+  userModel
+  .findOneAndUpdate(conditions, req.body)
+  .exec()
+  .then(doc => {
+  if (!doc) {return res.status(404).end(); }
+  return res.status(200);
+  })   //ellers 204.end()
+  .catch(err => next(err));
+})
 
 app.post('/login', (req,res) => {
   if(req.body!=null){

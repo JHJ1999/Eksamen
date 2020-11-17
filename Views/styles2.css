@@ -29,17 +29,15 @@
     text-align: center;
 }
 
-
-
-#rediger {
-    color: cadetblue;
+#update {
+color: cadetblue;
     background-color: seashell;
-    }
+}
     
-    #slet {
+#slet {
     color: red;
     background-color: seashell;
-    }
+}
 
 #logOut{
     color: cadetblue;

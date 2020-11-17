@@ -18,38 +18,44 @@
     <div class="left">
         
         <% if (user) { %>
-            <h2 id="username"> Navn: <%=user.name%> </h2>
+
+            <ul>
+
+        <form name="update" action="http://localhost:3000/update" role="form" method="POST">
+
+        <input type="text" name="id" value='<%- user._id %>'style="display: none;">        
+            
+            <label> Navn: <%=user.name%> <input placeholder="Opdater navn"> </label>
         
         <br>
-        <ul>
-        
-            <li> Email: <%=user.email%> </li>
-        
-        <br>
-        
-            <li> Alder: <%=user.age%> </li>
-        
-        <br>
-        
-            <li> Køn: <%=user.gender%> </li>
+            
+            <label>Email: <%=user.email%> <input placeholder="Opdater Email" type="text"></label>
         
         <br>
         
-            <li> Foretrukket køn: <%=user.preferredGender%> </li>
+            <label> Alder: <%=user.age%> <input placeholder="Opdater alder" type="number"></label>
         
         <br>
         
-            <li> Interesser: <%=user.interest%> </li>
+            <label> Køn: <%=user.gender%> <input placeholder="Opdater køn" type="text"></label>
         
+        <br>
+        
+            <label> Foretrukket køn: <%=user.preferredGender%> <input placeholder="Opdater foretrukket køn" type="text"></label>
+        
+        <br>
+        
+            <label> Interesser: <%=user.interest%> <input placeholder="Opdater interresser" type="text"></label>  
+        
+        <br>
+
+        <input type="submit" value="Opdater bruger" id="update">
+
+        </form>
        
         </ul>
         <br>
         
-        <% function editUser() { %>
-            <%  %>
-        
-          <% } %>
-        <button id="rediger">Rediger bruger</button>
         
         <form name="delete" action="http://localhost:3000/delete" role="form" method="POST" >
             <input type="text" name="id" value='<%- user._id %>' style="display: none;">
