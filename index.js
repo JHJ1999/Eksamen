@@ -5,11 +5,11 @@ const port = 3000
 const mongoose = require('mongoose');
 const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
-const ejs = require('ejs');
 const { findOneAndUpdate, update } = require('./Model/User');
 
 
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
+//connecter til mongoDB cluster
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -22,14 +22,14 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({urlencoded: true}));
 app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine 
-app.set("view-engine", "ejs"); //sætter view engine til ejs
+ //sætter view engine til ejs
 //henter html - måske gøre det samme for logget ind!
 app.get('/', function(req, res) {
-  res.render("index.ejs");
+  res.render("index.html");
 }); //henter min index fil
 
 
-//finder alle users - test
+//finder alle users - test for admin
 app.get("/admin", function(req,res){
   userModel.find({role: "user"})
       .then(user => {
@@ -59,7 +59,7 @@ app.post('/signup', (req, res) => {
     .then(user =>{
 
     if(user)
-    {res.status(200).render("homepage.ejs", {user: user}); // redirect til homepage html fil 
+    {res.status(200).render("homepage.html", {user: user}); // redirect til homepage html fil 
   }
   })
     .catch(err =>
@@ -72,18 +72,16 @@ app.post('/delete', (req,res) => {
     .exec()
     .then(doc => {
     if (!doc) {return res.status(404).end(); }
-    return res.status(200).render("index.ejs");
+    return res.status(200).render("index.html");
     })   //ellers 204.end()
     .catch(err => next(err));
 })
 
 
 app.post('/update', (req,res) => {
-  var conditions = { _id: req.params.id };
-  
+ var id= req.params._id; 
   userModel
-  .findOneAndUpdate(conditions, req.body)
-  .exec()
+  .find({_id: id})
   .then(doc => {
   if (!doc) {return res.status(404).end(); }
   return res.status(200);
@@ -102,7 +100,7 @@ app.post('/login', (req,res) => {
         if(users[0].role == "admin") {
           userModel.find({role: "user"}) //henter liste af users til admin side
           .then(allUsers => {
-            res.status(200).render("admin.ejs", {admin: users[0], allUsers: allUsers});
+            res.status(200).render("homepage.html", {admin: users[0], allUsers: allUsers});
           })
           .catch( err => {
             res.status(500).json({
