@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="styles2.css">
+    <script type = "text/javascript" >
+        function preventBack(){window.history.forward();}
+         setTimeout("preventBack()", 0);
+         window.onunload=function(){null};
+     </script> <!--Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinder Clone</title>
+    
+</head>
+<body>
+
+<div class="header">
+    <h1>Tinder Clone</h1>
+</div>
+
+<div class="main">
+
+
+    <div class="left">
+        
+        <% if (user) { %>
+
+            <ul>
+
+        <form name="update" action="http://localhost:3000/update" role="form" method="POST">
+
+        <input type="text" name="id" value='<%- user._id %>'style="display: none;">        
+            
+            <label> Navn: <%=user.name%> <input name="navn" placeholder="Opdater navn"> </label>
+        
+        <br>
+            
+            <label>Email: <%=user.email%> <input name="email" placeholder="Opdater Email" type="text"></label>
+        
+        <br>
+        
+            <label> Alder: <%=user.age%> <input name="age" placeholder="Opdater alder" type="number"></label>
+        
+        <br>
+        
+            <label> Køn: <%=user.gender%> <input name="gender" placeholder="Opdater køn" type="text"></label>
+        
+        <br>
+        
+            <label> Foretrukket køn: <%=user.preferredGender%> <input name="preferredGender" placeholder="Opdater foretrukket køn" type="text"></label>
+        
+        <br>
+        
+            <label> Interesser: <%=user.interest%> <input name="interest" placeholder="Opdater interresser" type="text"></label>  
+        
+        <br>
+
+        <input type="submit" value="Opdater bruger" id="update">
+
+        </form>
+       
+        </ul>
+        <br>
+        
+        
+        <form name="delete" action="http://localhost:3000/delete" role="form" method="POST" >
+            <input type="text" name="id" value='<%- user._id %>' style="display: none;">
+        <input type="submit" value="Slet bruger" id="slet">
+        </form>
+        
+        <% } %>
+        
+      
+         
+         <button id="logOut" onclick="location.href='http://localhost:3000/'">Log ud</button>
+        
+    </div>
+
+
+    
+    <div class="right">
+
+        <b>Matches</b>
+        <br>
+        <% if (userList) { %>
+            <h3>User 1</h3>
+                <ul>
+                    <li> Name: <%=userList[0].name%> </li>
+                    <li> Age: <%=userList[0].age%> </li>
+                    <li> Interest: <%=userList[0].interest%> </li>
+                    <li> Email: <%=userList[0].email%> </li>
+                
+                <br>
+              
+            <h3>User 2</h3>
+                     <li> Name: <%=userList[1].name%> </li>
+                    <li> Age: <%=userList[1].age%> </li>
+                    <li> Interest: <%=userList[1].interest%> </li>
+                    <li> Email: <%=userList[1].email%> </li>
+
+            <br>
+            <h3>User 3</h3>
+                    <li> Name: <%=userList[2].name%> </li>
+                    <li> Age: <%=userList[2].age%> </li>
+                    <li> Interest: <%=userList[2].interest%> </li>
+                    <li> Email: <%=userList[2].email%> </li>
+             
+                </ul>
+        <% } %>
+        <br>
+        <b></b>
+        <br>
+        <b>Notifikationer</b>
+        <br>
+        <b></b>
+    </div>
+
+
+
+
+
+
+</div>
+    
+<footer>
+</footer>
+
+</body>
+
+
+<script></script>
+</html>

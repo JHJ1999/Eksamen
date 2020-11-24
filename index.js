@@ -5,6 +5,8 @@ const port = 3000
 const mongoose = require('mongoose');
 const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
+const ejs = require('ejs');
+const session = require('express-session');
 const { findOneAndUpdate, update } = require('./Model/User');
 
 
@@ -19,13 +21,23 @@ console.log("database connected");
 
 // skal gå igennem 
 app.use(cors());
+app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({urlencoded: true}));
 app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine 
  //sætter view engine til ejs
 //henter html - måske gøre det samme for logget ind!
+
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 365 * 1000
+  }
+})) //forblive logget ind 
+
 app.get('/', function(req, res) {
-  res.render("index.html");
+  res.render("index.ejs");
 }); //henter min index fil
 
 
@@ -42,7 +54,7 @@ app.get("/admin", function(req,res){
       });
 });
 
-app.post('/signup', (req, res) => {
+app.post('/signup', (req, res) => { //fejl i denne
   const newUser = new userModel({
     _id: mongoose.Types.ObjectId(),
     role: "user",
@@ -58,8 +70,8 @@ app.post('/signup', (req, res) => {
   newUser.save()
     .then(user =>{
 
-    if(user)
-    {res.status(200).render("homepage.html", {user: user}); // redirect til homepage html fil 
+    if(user) //lige nu ikke oprette ny user pga den ikke render de nye ændringer i homepage.html
+    {res.status(200).render("homepage.ejs", {user: user}); // redirect til homepage html fil 
   }
   })
     .catch(err =>
@@ -72,7 +84,7 @@ app.post('/delete', (req,res) => {
     .exec()
     .then(doc => {
     if (!doc) {return res.status(404).end(); }
-    return res.status(200).render("index.html");
+    return res.status(200).render("index.ejs");
     })   //ellers 204.end()
     .catch(err => next(err));
 })
@@ -100,7 +112,7 @@ app.post('/login', (req,res) => {
         if(users[0].role == "admin") {
           userModel.find({role: "user"}) //henter liste af users til admin side
           .then(allUsers => {
-            res.status(200).render("homepage.html", {admin: users[0], allUsers: allUsers});
+            res.status(200).render("homepage.ejs", {admin: users[0], allUsers: allUsers});
           })
           .catch( err => {
             res.status(500).json({
@@ -110,7 +122,11 @@ app.post('/login', (req,res) => {
       }
 
       else if (users[0].role == "user") {
-          res.status(200).render("homepage.ejs", {user: users[0]});
+          userModel.find({role: "user"})
+          .then (userList => {
+            res.status(200).render("homepage.ejs", {user: users[0], userList});
+          })
+          
       } 
         else {
           res.status(200).json(users[0]);
