@@ -27,31 +27,55 @@
 
             <ul>
 
-        <form name="update" action="http://localhost:3000/update" role="form" method="POST">
+        <form name="updateUser" action="http://localhost:3000/update" role="form" method="POST">
 
         <input type="text" name="id" value='<%- user._id %>'style="display: none;">        
-            
-            <label> Navn: <%=user.name%> <input name="navn" placeholder="Opdater navn"> </label>
+            <!--Måske ændre alle til H3, hvis det ser bedre ud-->
+            <label> Navn: <%=user.name%> 
+                <br>    
+                    <input name="navn" placeholder="Opdater navn" type="text"> </label>
+        
+        <br>
+        
+            <label> ID: <%=user._id%> 
+                <br>
+                    <input name="_id" placeholder="Indsæt ID" type="text"> </label>
         
         <br>
             
-            <label>Email: <%=user.email%> <input name="email" placeholder="Opdater Email" type="text"></label>
+            <label>Email: <%=user.email%> 
+                <br>
+                    <input name="email" placeholder="Opdater Email" type="text"></label>
+        
+        <br>
+            
+            <label>Password: <%=user.password%> 
+                <br>
+                    <input name="password" placeholder="Opdater Password" type="text"></label>
         
         <br>
         
-            <label> Alder: <%=user.age%> <input name="age" placeholder="Opdater alder" type="number"></label>
+            <label> Alder: <%=user.age%> 
+                <br>
+                    <input name="age" placeholder="Opdater alder" type="number"></label>
         
         <br>
         
-            <label> Køn: <%=user.gender%> <input name="gender" placeholder="Opdater køn" type="text"></label>
+            <label> Køn: <%=user.gender%> 
+                <br>
+                    <input name="gender" placeholder="Opdater køn" type="text"></label>
         
         <br>
         
-            <label> Foretrukket køn: <%=user.preferredGender%> <input name="preferredGender" placeholder="Opdater foretrukket køn" type="text"></label>
+            <label> Foretrukket køn: <%=user.preferredGender%>
+                <br>    
+                    <input name="preferredGender" placeholder="Opdater foretrukket køn" type="text"></label>
         
         <br>
         
-            <label> Interesser: <%=user.interest%> <input name="interest" placeholder="Opdater interresser" type="text"></label>  
+            <label> Interesser: <%=user.interest%>
+                <br>   
+                    <input name="interest" placeholder="Opdater interresser" type="text"></label>  
         
         <br>
 
@@ -89,24 +113,49 @@
                     <li> Age: <%=userList[0].age%> </li>
                     <li> Interest: <%=userList[0].interest%> </li>
                     <li> Email: <%=userList[0].email%> </li>
-                
-                <br>
+                <button class="like">Like 
+
+                    </button>
+
+                <button class="dislike">Dislike
+                    
+                    </button>
+        <br>
               
             <h3>User 2</h3>
-                     <li> Name: <%=userList[1].name%> </li>
+                    <li> Name: <%=userList[1].name%> </li>
                     <li> Age: <%=userList[1].age%> </li>
                     <li> Interest: <%=userList[1].interest%> </li>
                     <li> Email: <%=userList[1].email%> </li>
 
-            <br>
+                <button class="like">Like
+
+                    </button>
+    
+                <button class="dislike">Dislike
+                        
+                    </button>
+        <br> 
+    
             <h3>User 3</h3>
                     <li> Name: <%=userList[2].name%> </li>
                     <li> Age: <%=userList[2].age%> </li>
                     <li> Interest: <%=userList[2].interest%> </li>
                     <li> Email: <%=userList[2].email%> </li>
-             
+                
+                <button class="like">Like
+
+                    </button>
+    
+                <button class="dislike">Dislike
+                        
+                    </button>        
+        <br> 
                 </ul>
         <% } %>
+
+
+        
         <br>
         <b></b>
         <br>

@@ -43,3 +43,13 @@ color: cadetblue;
     color: cadetblue;
     background-color: seashell;
 }
+
+.like{
+    color: white;
+    background-color: seagreen;
+}
+
+.dislike{
+    color:white;
+    background-color: lightcoral;
+}

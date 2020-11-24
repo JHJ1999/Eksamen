@@ -6,8 +6,7 @@ const mongoose = require('mongoose');
 const userModel = require("./Model/User");
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
-const session = require('express-session');
-const { findOneAndUpdate, update } = require('./Model/User');
+const { updateOne, update } = require('./Model/User');
 
 
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
@@ -28,13 +27,14 @@ app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine
  //sætter view engine til ejs
 //henter html - måske gøre det samme for logget ind!
 
-app.use(session({
+ /* app.use(session({
   secret: 'secret',
   resave: true,
   cookie: {
     maxAge: 24 * 60 * 60 * 365 * 1000
   }
 })) //forblive logget ind 
+*/
 
 app.get('/', function(req, res) {
   res.render("index.ejs");
@@ -69,9 +69,9 @@ app.post('/signup', (req, res) => { //fejl i denne
 
   newUser.save()
     .then(user =>{
-
+    
     if(user) //lige nu ikke oprette ny user pga den ikke render de nye ændringer i homepage.html
-    {res.status(200).render("homepage.ejs", {user: user}); // redirect til homepage html fil 
+    {res.status(200).render("index.ejs"); // redirect til homepage html fil 
   }
   })
     .catch(err =>
@@ -91,15 +91,24 @@ app.post('/delete', (req,res) => {
 
 
 app.post('/update', (req,res) => {
- var id= req.params._id; 
-  userModel
-  .find({_id: id})
-  .then(doc => {
-  if (!doc) {return res.status(404).end(); }
-  return res.status(200);
-  })   //ellers 204.end()
-  .catch(err => next(err));
+ var updateUser = {
+   name: req.body.name,
+   email: req.body.email,
+   age: req.body.ag,
+   gender: req.body.gender,
+   preferredGender: req.body.preferredGender,
+   interest: req.body.interest
+ }
+ userModel.updateOne({_id: req.body._id}, {$set: updateUser})
+ .then(result =>{
+  res.render("index.ejs", result);
+ }) 
+ .catch( err => {
+  res.status(500).json({
+      error: err 
+    })
 })
+});
 
 app.post('/login', (req,res) => {
   if(req.body!=null){
@@ -122,11 +131,11 @@ app.post('/login', (req,res) => {
       }
 
       else if (users[0].role == "user") {
-          userModel.find({role: "user"})
+          userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match 
           .then (userList => {
-            res.status(200).render("homepage.ejs", {user: users[0], userList});
+            res.status(200).render("homepage.ejs", {user: users[0], userList: userList});
           })
-          
+          //{role: "user"}, 
       } 
         else {
           res.status(200).json(users[0]);
