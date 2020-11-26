@@ -10,7 +10,8 @@ const userSchema = mongoose.Schema({
     age: Number,
     gender: String,
     preferredGender: String,
-    interest: String
+    interest: String,
+    likes: Array
 })
 
 const userModel = mongoose.model('User', userSchema);

@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="styles2.css">
+
     <script type = "text/javascript" >
         function preventBack(){window.history.forward();}
          setTimeout("preventBack()", 0);
          window.onunload=function(){null};
      </script> <!--Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete-->
+     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tinder Clone</title>
@@ -33,7 +35,7 @@
             <!--Måske ændre alle til H3, hvis det ser bedre ud-->
             <label> Navn: <%=user.name%> 
                 <br>    
-                    <input name="navn" placeholder="Opdater navn" type="text"> </label>
+                    <input name="name" placeholder="Opdater navn" type="text"> </label>
         
         <br>
         
@@ -102,58 +104,81 @@
 
 
     
-    <div class="right">
+<div class="right">
+
+    
 
         <b>Matches</b>
         <br>
         <% if (userList) { %>
+
             <h3>User 1</h3>
+
                 <ul>
+                
+                <form name="like" action="http://localhost:3000/likes" role="form" method="POST">
+
                     <li> Name: <%=userList[0].name%> </li>
+
                     <li> Age: <%=userList[0].age%> </li>
+
                     <li> Interest: <%=userList[0].interest%> </li>
+
                     <li> Email: <%=userList[0].email%> </li>
-                <button class="like">Like 
 
-                    </button>
+                    <input type="text" name="id" value='<%- user._id %>' style="display: none;">
 
-                <button class="dislike">Dislike
-                    
-                    </button>
+                    <button class="like">Like </button>
+
+                    <button class="dislike">Dislike </button>
+                </form>    
+                
+
+               
         <br>
               
             <h3>User 2</h3>
+
                     <li> Name: <%=userList[1].name%> </li>
                     <li> Age: <%=userList[1].age%> </li>
                     <li> Interest: <%=userList[1].interest%> </li>
                     <li> Email: <%=userList[1].email%> </li>
 
-                <button class="like">Like
-
-                    </button>
+               
+                    <button class="like">Like 
     
-                <button class="dislike">Dislike
-                        
                     </button>
+                
+                    <button class="dislike">Dislike 
+    
+                    </button>
+                
         <br> 
     
             <h3>User 3</h3>
+
                     <li> Name: <%=userList[2].name%> </li>
                     <li> Age: <%=userList[2].age%> </li>
                     <li> Interest: <%=userList[2].interest%> </li>
                     <li> Email: <%=userList[2].email%> </li>
                 
-                <button class="like">Like
+                
+                    <button class="like">Like 
 
                     </button>
+                
+                
+
+               
+                    <button class="dislike">Dislike 
+
+                    </button>
+                  
     
-                <button class="dislike">Dislike
-                        
-                    </button>        
         <br> 
                 </ul>
         <% } %>
-
+    </form> 
 
         
         <br>

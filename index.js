@@ -67,12 +67,13 @@ app.post('/signup', (req, res) => { //fejl i denne
     interest: req.body.interest
   });
 
-  newUser.save()
+     newUser.save()
     .then(user =>{
-    
-    if(user) //lige nu ikke oprette ny user pga den ikke render de nye ændringer i homepage.html
-    {res.status(200).render("index.ejs"); // redirect til homepage html fil 
-  }
+      
+    userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match 
+    .then (userList => {
+        res.status(200).render("homepage.ejs", {user: user, userList: userList});
+      })
   })
     .catch(err =>
     res.status(500).json({error: err}));
@@ -89,12 +90,26 @@ app.post('/delete', (req,res) => {
     .catch(err => next(err));
 })
 
+app.post('/likes', (req,res) => {
+  var userLikes = {
+    likes: req.body._id
+  }
+  userModel.updateOne({_id: req.body._id}, {$push: {"likes": userLikes}})
+    .then(result =>{
+      res.render("matches.ejs", result);
+        })
+        .catch( err => {
+          res.status(500).json({
+              error: err 
+            })
+        })
+});  
 
 app.post('/update', (req,res) => {
  var updateUser = {
    name: req.body.name,
    email: req.body.email,
-   age: req.body.ag,
+   age: req.body.age,
    gender: req.body.gender,
    preferredGender: req.body.preferredGender,
    interest: req.body.interest
@@ -134,7 +149,7 @@ app.post('/login', (req,res) => {
           userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match 
           .then (userList => {
             res.status(200).render("homepage.ejs", {user: users[0], userList: userList});
-          })
+          }) //catch
           //{role: "user"}, 
       } 
         else {
