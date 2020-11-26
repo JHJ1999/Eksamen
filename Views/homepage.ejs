@@ -29,7 +29,7 @@
 
             <ul>
 
-        <form name="updateUser" action="http://localhost:3000/update" role="form" method="POST">
+        <form name="updateUser" action="http://localhost:3000/routes/update" role="form" method="POST">
 
         <input type="text" name="id" value='<%- user._id %>'style="display: none;">        
             <!--Måske ændre alle til H3, hvis det ser bedre ud-->
@@ -89,7 +89,7 @@
         <br>
         
         
-        <form name="delete" action="http://localhost:3000/delete" role="form" method="POST" >
+        <form name="delete" action="http://localhost:3000/routes/delete" role="form" method="POST" >
             <input type="text" name="id" value='<%- user._id %>' style="display: none;">
         <input type="submit" value="Slet bruger" id="slet">
         </form>
@@ -116,7 +116,7 @@
 
                 <ul>
                 
-                <form name="like" action="http://localhost:3000/likes" role="form" method="POST">
+                <form name="like" action="http://localhost:3000/routes/likes" role="form" method="POST">
 
                     <li> Name: <%=userList[0].name%> </li>
 
@@ -126,11 +126,11 @@
 
                     <li> Email: <%=userList[0].email%> </li>
 
-                    <input type="text" name="id" value='<%- user._id %>' style="display: none;">
+                    <input type="text" name="email" value='<%- user.email %>' style="display: none;">
+                    <input type="text" name="match_id" value="<%=userList[0]._id %>" style="display: none;">
+                    <button name="like" class="like">Like </button>
 
-                    <button class="like">Like </button>
-
-                    <button class="dislike">Dislike </button>
+                    <button name="dislike" class="dislike">Dislike </button>
                 </form>    
                 
 
