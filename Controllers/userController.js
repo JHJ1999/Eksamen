@@ -113,6 +113,21 @@ exports.update = (req,res) => {
 
 
 exports.likes = (req,res) => {
+  
+  var secondId = req.body.second_id;
+
+userModel.updateOne({_id: req.params.id}, {$push: {"likes": secondId}})
+.then(matchList => {
+    res.status(200).render("../Views/matches.ejs", {matchList: matchList});
+          })
+
+.catch(err => {
+ res.status(500).json({
+     error: err 
+   })
+})
+
+  /*
     if (req.body.like != undefined){
       console.log("bruger liket")
       userModel.find({email: req.body.email})
@@ -148,4 +163,5 @@ exports.likes = (req,res) => {
         } else if (req.body.dislike != undefined){
       console.log("Bruger disliked");
     }  
+    */
 }

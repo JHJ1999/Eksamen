@@ -108,85 +108,39 @@
 
     
 
-        <b>Matches</b>
-        <br>
+        <h1>Potentielle Matches</h1> 
+    
         <% if (userList) { %>
 
-            <h3>User 1</h3>
+        
+            <% userList.forEach(function (userList) { %>
+                <form name="like" action="http://localhost:3000/routes/<%=user._id%>/likes" role="form" method="POST">
+                    <h2><%= userList.name%></h2>
 
                 <ul>
-                
-                <form name="like" action="http://localhost:3000/routes/likes" role="form" method="POST">
+                    <li> Name: <%userList.name%> </li>
 
-                    <li> Name: <%=userList[0].name%> </li>
+                    <li> Age: <%=userList.age%> </li>
 
-                    <li> Age: <%=userList[0].age%> </li>
+                    <li> Interest: <%=userList.interest%> </li>
 
-                    <li> Interest: <%=userList[0].interest%> </li>
-
-                    <li> Email: <%=userList[0].email%> </li>
-
-                    <input type="text" name="email" value='<%- user.email %>' style="display: none;">
-                    <input type="text" name="match_id" value="<%=userList[0]._id %>" style="display: none;">
-                    <button name="like" class="like">Like </button>
-
-                    <button name="dislike" class="dislike">Dislike </button>
-                </form>    
-                
-
-               
-        <br>
-              
-            <h3>User 2</h3>
-
-                    <li> Name: <%=userList[1].name%> </li>
-                    <li> Age: <%=userList[1].age%> </li>
-                    <li> Interest: <%=userList[1].interest%> </li>
-                    <li> Email: <%=userList[1].email%> </li>
-
-               
-                    <button class="like">Like 
-    
-                    </button>
-                
-                    <button class="dislike">Dislike 
-    
-                    </button>
-                
-        <br> 
-    
-            <h3>User 3</h3>
-
-                    <li> Name: <%=userList[2].name%> </li>
-                    <li> Age: <%=userList[2].age%> </li>
-                    <li> Interest: <%=userList[2].interest%> </li>
-                    <li> Email: <%=userList[2].email%> </li>
-                
-                
-                    <button class="like">Like 
-
-                    </button>
-                
-                
-
-               
-                    <button class="dislike">Dislike 
-
-                    </button>
-                  
-    
-        <br> 
+                    <li> Email: <%=userList.email%> </li>
                 </ul>
-        <% } %>
-    </form> 
 
+                    
+                    <input type="text" name="second_id" value="<%=userList._id %>">
+                    
+                    <button name="like" class="like">Like </button>
+                    <button name="dislike" class="dislike">Dislike </button>
+
+                    <% }) %>
+                </form>
         
-        <br>
-        <b></b>
+        <% } %>
+      
         <br>
         <b>Notifikationer</b>
         <br>
-        <b></b>
     </div>
 
 

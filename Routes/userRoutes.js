@@ -10,22 +10,22 @@ router.use(express.static("./Views/")); // for at hente HTML/CSS til view engine
  //sætter view engine til ejs
 
 
-const loginController = require('../Controllers/Users');
+const loginController = require('../Controllers/userController');
 
-const signupController = require('../Controllers/Users');
+const signupController = require('../Controllers/userController');
 
-const deleteController = require('../Controllers/Users');
+const deleteController = require('../Controllers/userController');
 
-const likesController = require('../Controllers/Users');
+const likesController = require('../Controllers/userController');
 
-const updateController = require('../Controllers/Users');
+const updateController = require('../Controllers/userController');
 
 
 router.post('/signup', signupController.signup);
   
 router.post('/delete', deleteController.delete);
 
-router.post('/likes', likesController.likes);  
+router.post('/:id/likes', likesController.likes);  
 
 router.post('/update', updateController.update);
 
