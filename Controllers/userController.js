@@ -26,6 +26,7 @@ exports.login = (req,res) => {
             .then (userList => {
               var randomUser = Math.floor(Math.random() * (userList.length));
               res.status(200).render("homepage.ejs", {user: users[0], userList: userList[randomUser]}); //for at vise tilfældige users 
+              req.session.user = user;
             }) 
         } 
           else {
@@ -129,15 +130,14 @@ exports.likes = async (req,res) => {
     .then(like => {  
       console.log(req.params.id, secondId, userArray, like.likes) 
       if (userArray.includes(secondId) && like.likes.includes(req.params.id)) {
-
         console.log("match")
       } else console.log("no match")
        res.status(200).render("../Views/homepage.ejs");
-      })
+      })  
     .catch(err => {
     res.status(500).json({
       error: err 
-    })
+    }) 
  })
  
   }

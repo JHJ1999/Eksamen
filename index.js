@@ -6,8 +6,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRoutes = require('./Routes/userRoutes');
 const ejs = require('ejs');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
-//const { updateOne, update } = require('./Model/User');
+
 
 
 mongoose.connect("mongodb+srv://eksamen:eksamen@cluster0.uuj1t.mongodb.net/Cluster0?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
@@ -27,10 +29,18 @@ app.use('/routes', userRoutes); // henviser til mine userRoutes
 app.use(cors());
 app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine 
  //sætter view engine til ejs
+app.use(cookieParser());
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: true
+}));
 
+//forkert placering af req.session.user 
  app.get('/', (req,res) => {
+  //if (req.session.user) {
   res.render("index.ejs");
-});
+ });
 
  app.listen(port, () => {
   console.log(`App kører på http://localhost:${port}`)
@@ -38,30 +48,17 @@ app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine
 
 
 
+
+
 /*
-   <% matchList.forEach(function (matchList) { %>
-             <form name="remove" action="http://localhost:3000/routes/<%=user._id%>/matches" role="form" method="POST"></form>
-               
-                    <h2><%= matchList.name%></h2>
-
-                <ul>
-                    <li> Name: <%matchList.name%> </li>
-
-                    <li> Age: <%=matchList.age%> </li>
-
-                    <li> Interest: <%=matchList.interest%> </li>
-
-                    <li> Email: <%=matchList.email%> </li>
-                </ul>
-
-                    
-                    <input type="text" name="second_id" value="<%=userList._id %>">
-                    
-                    
-                    <button name="remove" class="remove">Fjern match </button>
-
-                   
-                </form>
-        
-        <% } %>
+module.exports.delete = (req,res) => {
+  userModel
+   .findByIdAndRemove(req.body.id)
+   .exec()
+   .then(doc => {
+   if (!doc) {return res.status(404).end(); }
+   return res.status(200).render("index.ejs");
+   })   //ellers 204.end()
+   .catch(err => next(err));
+}
 */
