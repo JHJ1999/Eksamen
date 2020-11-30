@@ -109,11 +109,9 @@
     
 
         <h1>Potentielle Matches</h1> 
-    
-        <% if (userList) { %>
 
         
-            <% userList.forEach(function (userList) { %>
+            <% if (userList) { %>
                 <form name="like" action="http://localhost:3000/routes/<%=user._id%>/likes" role="form" method="POST">
                     <h2><%= userList.name%></h2>
 
@@ -130,13 +128,16 @@
                     
                     <input type="text" name="second_id" value="<%=userList._id %>">
                     
+                    <input type="text" name="userArray" value="<%=user.likes %>" style="display: none;">
+                    
+                    
                     <button name="like" class="like">Like </button>
                     <button name="dislike" class="dislike">Dislike </button>
 
-                    <% }) %>
+                   
                 </form>
-        
-        <% } %>
+                <% } %>
+       
       
         <br>
         <b>Notifikationer</b>

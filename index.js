@@ -35,3 +35,33 @@ app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine
  app.listen(port, () => {
   console.log(`App kører på http://localhost:${port}`)
 })
+
+
+
+/*
+   <% matchList.forEach(function (matchList) { %>
+             <form name="remove" action="http://localhost:3000/routes/<%=user._id%>/matches" role="form" method="POST"></form>
+               
+                    <h2><%= matchList.name%></h2>
+
+                <ul>
+                    <li> Name: <%matchList.name%> </li>
+
+                    <li> Age: <%=matchList.age%> </li>
+
+                    <li> Interest: <%=matchList.interest%> </li>
+
+                    <li> Email: <%=matchList.email%> </li>
+                </ul>
+
+                    
+                    <input type="text" name="second_id" value="<%=userList._id %>">
+                    
+                    
+                    <button name="remove" class="remove">Fjern match </button>
+
+                   
+                </form>
+        
+        <% } %>
+*/

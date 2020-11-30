@@ -22,11 +22,11 @@ exports.login = (req,res) => {
         }
   
         else if (users[0].role == "user") {
-            userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match 
+            userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke viser sin egen bruger som et muligt match 
             .then (userList => {
-              res.status(200).render("homepage.ejs", {user: users[0], userList: userList});
-            }) //catch
-            //{role: "user"}, 
+              var randomUser = Math.floor(Math.random() * (userList.length));
+              res.status(200).render("homepage.ejs", {user: users[0], userList: userList[randomUser]}); //for at vise tilfældige users 
+            }) 
         } 
           else {
             res.status(200).json(users[0]);
@@ -112,20 +112,46 @@ exports.update = (req,res) => {
 }
 
 
-exports.likes = (req,res) => {
-  
+exports.likes = async (req,res) => {
+
   var secondId = req.body.second_id;
+  var userArray = req.body.userArray.split(",");
+  //var secondArray = like.likes.split(", "); 
 
-userModel.updateOne({_id: req.params.id}, {$push: {"likes": secondId}})
-.then(matchList => {
-    res.status(200).render("../Views/matches.ejs", {matchList: matchList});
-          })
+  if (req.body.like != undefined){
+    //res.send("It's a match!")
+    //if (userArray.includes(secondId) && like.likes.includes(req.params.id)){
+      //console.log ("it's already a match")
+    //}
+    await userModel.updateOne({_id: req.params.id}, {$push: {"likes": secondId}}) 
+    
+     userModel.findOne(({_id: secondId}))                          
+    .then(like => {  
+      console.log(req.params.id, secondId, userArray, like.likes) 
+      if (userArray.includes(secondId) && like.likes.includes(req.params.id)) {
 
-.catch(err => {
- res.status(500).json({
-     error: err 
-   })
-})
+        console.log("match")
+      } else console.log("no match")
+       res.status(200).render("../Views/homepage.ejs");
+      })
+    .catch(err => {
+    res.status(500).json({
+      error: err 
+    })
+ })
+ 
+  }
+  //req.paras.ID er burger 1' ID
+  //secondID bruger 1 likes 
+  // secondID er bruger 2' ID
+  //like.likes er bruger 2' like-list
+  // userArray er bruger 1' like-list
+
+
+
+// 
+
+
 
   /*
     if (req.body.like != undefined){
