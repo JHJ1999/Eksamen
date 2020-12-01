@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema({
     gender: String,
     preferredGender: String,
     interest: String,
-    likes: Array
+    likes: Array,
+    matches: Array
 })
 
 const userModel = mongoose.model('User', userSchema);

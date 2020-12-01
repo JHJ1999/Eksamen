@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var power = require('../index')
+const power = require('../index');
 
 describe('delete()', function (){
     it('Should delete an already existing user from the DB', function (){

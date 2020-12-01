@@ -1,5 +1,7 @@
 const userModel = require("../Model/User");
+//const matchModel = require("../Model/Match");
 const mongoose = require('mongoose');
+
 
 exports.login = (req,res) => {
     if(req.body!=null){
@@ -26,7 +28,7 @@ exports.login = (req,res) => {
             .then (userList => {
               var randomUser = Math.floor(Math.random() * (userList.length));
               res.status(200).render("homepage.ejs", {user: users[0], userList: userList[randomUser]}); //for at vise tilfældige users 
-              req.session.user = user;
+              //req.session.user = user;
             }) 
         } 
           else {
@@ -62,7 +64,8 @@ exports.signup = (req, res) => {
         gender: req.body.gender,
         preferredGender: req.body.preferredGender,
         interest: req.body.interest,
-        likes: []
+        likes: [],
+        matches: []
       });
     
          newUser.save()
@@ -116,38 +119,66 @@ exports.update = (req,res) => {
 exports.likes = async (req,res) => {
 
   var secondId = req.body.second_id;
-  var userArray = req.body.userArray.split(",");
-  //var secondArray = like.likes.split(", "); 
+  var userArray = req.body.second_id;
 
   if (req.body.like != undefined){
-    //res.send("It's a match!")
-    //if (userArray.includes(secondId) && like.likes.includes(req.params.id)){
-      //console.log ("it's already a match")
-    //}
-    await userModel.updateOne({_id: req.params.id}, {$push: {"likes": secondId}}) 
+
+  
+    await userModel.updateOne({_id: req.params.id}, {$addToSet: {"likes": secondId}})  //addToSet tilskriver kun ID'et, hvis det ikke allerede er i arrayet.
     
-     userModel.findOne(({_id: secondId}))                          
-    .then(like => {  
-      console.log(req.params.id, secondId, userArray, like.likes) 
+    const like = await userModel.findOne(({_id: secondId}))                          
+     
+      //console.log(req.params.id, secondId, userArray, like.likes) 
       if (userArray.includes(secondId) && like.likes.includes(req.params.id)) {
+        res.send("");
         console.log("match")
+
+        await userModel.updateOne({_id: req.params.id}, {$addToSet: {"matches": secondId}})
+        
       } else console.log("no match")
-       res.status(200).render("../Views/homepage.ejs");
-      })  
-    .catch(err => {
-    res.status(500).json({
-      error: err 
-    }) 
- })
+       res.status(200);
+  } 
+}
+
+exports.matches = (req,res) => {
+
+  if (req.body.matches != undefined){
+  
+    userModel.findOne({_id: req.params.id}) 
+    .then (my_id => {
+    res.render("matches.ejs", my_id);
+    })
+    .catch( err => {
+      res.status(500).json({
+          error: err 
+        })
+    })
+  } 
+}
  
-  }
+/*
+})
+if (err){
+  console.log(err)
+}
+else {
+  res.status(200).render("../Views/matches.ejs", )
+}
+*/
+//userModel.updateOne({_id: req.params.id}, {$addToSet: {"matches": secondId}})
+
   //req.paras.ID er burger 1' ID
   //secondID bruger 1 likes 
   // secondID er bruger 2' ID
   //like.likes er bruger 2' like-list
   // userArray er bruger 1' like-list
 
-
+  //res.send("It's a match!")
+    //if (userArray.includes(secondId) && like.likes.includes(req.params.id)){
+      //console.log ("it's already a match")
+    //}
+ //var userArray = req.body.userArray.split(",");
+  //var secondArray = like.likes.split(", "); 
 
 // 
 
@@ -190,4 +221,4 @@ exports.likes = async (req,res) => {
       console.log("Bruger disliked");
     }  
     */
-}
+

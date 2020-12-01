@@ -20,6 +20,8 @@ const likesController = require('../Controllers/userController');
 
 const updateController = require('../Controllers/userController');
 
+const matchesController = require('../Controllers/userController');
+
 
 router.post('/signup', signupController.signup);
   
@@ -30,6 +32,8 @@ router.post('/:id/likes', likesController.likes);
 router.post('/update', updateController.update);
 
 router.post('/login', loginController.login);
+
+router.get('/:id/likes', matchesController.matches);
 
 
 module.exports = router;

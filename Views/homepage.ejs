@@ -3,12 +3,13 @@
 <head>
     <link rel="stylesheet" type="text/css" href="styles2.css">
 
+    <!--
     <script type = "text/javascript" >
         function preventBack(){window.history.forward();}
          setTimeout("preventBack()", 0);
          window.onunload=function(){null};
-     </script> <!--Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete-->
-     
+     </script> Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tinder Clone</title>
@@ -143,7 +144,16 @@
        
       
         <br>
-        <b>Notifikationer</b>
+            
+        <h3>Mine Matches</h3>
+
+            <form name="matches" action="http://localhost:3000/routes/<%=user._id%>/matches" role="form" method="GET">
+    
+            
+
+                <input type="text" name="my_id" value="<%=user._id %>">
+                <button name="matches" class="matches"> Mine matches</button>
+            </form>
         <br>
     </div>
 
