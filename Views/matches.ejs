@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="styles2.css">
+    <link rel="stylesheet" type="text/css" href="styles3.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tinder Clone</title>
+    
 </head>
 <body>
 
@@ -14,19 +15,41 @@
 
 <div class="main">
 
-    <div class="right">
 
-        <% if (my_id) { %>
+    <div class="left"> 
+        <% matches.forEach(function(matches){ %>
 
-        <h3>Matches</h3>
-            <li>ID: <%=my_id._id%></li>
-         
+        <% if (matches) { %>
+
+        <h3>Mine Matches</h3>
+        <ul>
+            <li> Name: <%=matches.name%> </li>
+
+            <li> Age: <%=matches.age%> </li>
+
+            <li> Interest: <%=matches.interest%> </li>
+
+            <li> Email: <%=matches.email%> </li>
+
+            <li> ID: <%=matches._id%></li>
+        </ul>
+
     
-            <% } %>
+        <br>
+    </div>
+
+<% } %>
+<% }) %>
 
 
 
-        <b>Notifikationer</b>
+</div>
+    
+<footer>
+</footer>
+
+</body>
+
 
 <script></script>
 </html>

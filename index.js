@@ -31,14 +31,15 @@ app.use(express.static("./Views/")); // for at hente HTML/CSS til view engine
  //sætter view engine til ejs
 app.use(cookieParser());
 app.use(session({
+  key: "user",
   secret: 'secret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie:{ expires:700000 }
 }));
 
 //forkert placering af req.session.user 
  app.get('/', (req,res) => {
-  //if (req.session.user) {
   res.render("index.ejs");
  });
 

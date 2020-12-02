@@ -140,24 +140,24 @@
                 
                 <button onClick="window.location.reload();" name="dislike" class="dislike">Dislike </button>
                 </form>
-                <% } %>
+                
        
       
         <br>
             
         <h3>Mine Matches</h3>
 
-            <form name="matches" action="http://localhost:3000/routes/<%=user._id%>/matches" role="form" method="GET">
+            <form name="matches" action="http://localhost:3000/routes/<%=user._id%>/matches" role="form" method="POST">
     
             
 
-                <input type="text" name="my_id" value="<%=user._id %>">
-                <button name="matches" class="matches"> Mine matches</button>
+                <input type="text" name="userMatches" value="<%=user._id %>">
+                <button name="matches" type="submit" class="matches"> Mine matches</button>
             </form>
         <br>
     </div>
 
-
+<% } %>
 
 
 

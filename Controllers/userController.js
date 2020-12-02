@@ -141,20 +141,57 @@ exports.likes = async (req,res) => {
 }
 
 exports.matches = (req,res) => {
-
-  if (req.body.matches != undefined){
   
-    userModel.findOne({_id: req.params.id}) 
-    .then (my_id => {
-    res.render("matches.ejs", my_id);
-    })
-    .catch( err => {
-      res.status(500).json({
-          error: err 
+  userModel.findOne({_id: req.params.id})
+  .then (userModel_id => {
+    userModel.find({_id: {$in: userModel_id.matches}})
+    .then( matches => { 
+        res.render('matches.ejs', {'matches': matches})
         })
-    })
-  } 
+        .catch( err => {
+        res.status(404).json({
+          error: err
+        });
+        });
+  });
+};
+
+
+
+
+
+  /*
+  if (req.body.matches != undefined){
+
+  var userMatch = await userModel.findOne({_id: req.params.id}) //bruger hvis matches jeg vil finde/vise 
+  var matches = await userModel.find({_id: {$in: userMatch.matches}}) // de matches jeg vil vise 
+  console.log(userMatch, matches) //usermatch er den rigtige bruger, jeg vil gerne have vist denne brugers matches 
+  res.render('matches.ejs', {"matches": matches}, {"userMatch": userMatch})
+
+
+  try {
+    
+  const users = await userModel.findOne({_id: req.params.id})
+  const matches = await userModel.find({_id: {$in: user.matches}})
+  console.log(users,matches)
+  res.render("matches.ejs", {users: users}, {matches: matches});
+    
+} catch (err) {
+  res.status(404).send('No matches')
 }
+  }  }
+  //var user = req.params.id;
+  // var matches = userModel.find({_id: {$in: userModel.matches}})
+
+ 
+   
+
+   // else( err => {
+     // res.status(500).json({
+       //   error: err 
+    //    })
+    //})
+//} 
  
 /*
 })
@@ -220,5 +257,4 @@ else {
         } else if (req.body.dislike != undefined){
       console.log("Bruger disliked");
     }  
-    */
-
+  */

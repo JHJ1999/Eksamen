@@ -33,7 +33,7 @@ router.post('/update', updateController.update);
 
 router.post('/login', loginController.login);
 
-router.get('/:id/likes', matchesController.matches);
+router.post('/:id/matches', matchesController.matches);
 
 
 module.exports = router;
