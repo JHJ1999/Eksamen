@@ -17,11 +17,14 @@
 
 
     <div class="left"> 
+        <h3>Mine Matches</h3>
         <% matches.forEach(function(matches){ %>
 
+        <form name="deleteMatches" action="http://localhost:3000/routes/<%=myUser._id%>/matches/delete" role="form" method="POST" >
+        
         <% if (matches) { %>
 
-        <h3>Mine Matches</h3>
+        
         <ul>
             <li> Name: <%=matches.name%> </li>
 
@@ -33,13 +36,21 @@
 
             <li> ID: <%=matches._id%></li>
         </ul>
+        
+         
+            <input name="id" type="text" value="<%=matches._id%>">
+        <button name="deleteMatch" type="submit" class="delete" >Slet match</button>
 
-    
+            </form>
+
+            <% } %>
+            <% }) %>
+
         <br>
     </div>
 
-<% } %>
-<% }) %>
+
+
 
 
 

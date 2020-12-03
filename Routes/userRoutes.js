@@ -22,6 +22,8 @@ const updateController = require('../Controllers/userController');
 
 const matchesController = require('../Controllers/userController');
 
+const matchesDeleteController = require('../Controllers/userController');
+
 
 router.post('/signup', signupController.signup);
   
@@ -34,6 +36,8 @@ router.post('/update', updateController.update);
 router.post('/login', loginController.login);
 
 router.post('/:id/matches', matchesController.matches);
+
+router.post('/:id/matches/delete', matchesDeleteController.matchesDelete);
 
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const userModel = require("../Model/User");
-//const matchModel = require("../Model/Match");
 const mongoose = require('mongoose');
 
 
@@ -54,8 +53,7 @@ exports.login = (req,res) => {
 exports.signup = (req, res) => { 
     console.log(req.body.name);
       const newUser = new userModel({
-        
-        _id: mongoose.Types.ObjectId(),
+
         role: "user",
         name: req.body.name,
         email: req.body.email,
@@ -140,8 +138,116 @@ exports.likes = async (req,res) => {
   } 
 }
 
-exports.matches = (req,res) => {
+exports.matches = async (req,res) => {
+
+  var userMatches = [];
+
+  if (req.body.matches != undefined) {
+
+    const myUser = await userModel.findOne({_id: req.params.id}) //bruger hvis matches jeg vil finde/vise 
+
+    if(myUser) {
+
+      
+
+      userMatches = myUser.matches;
+
+    }
+    const matches = await userModel.find({_id: {$in: userMatches}})
+    
+
+    res.render('matches.ejs', {"matches" : matches, "userMatches" : userMatches, "myUser" : myUser})
+
+
+  } else console.log("virker ikke")
+    res.status(200);
+}
+//myUser er ID'et for personen der er logget ind, og som skal have slettet/vist sine matches
+//matches er brugeren som er logget ind's matches
+exports.matchesDelete = (req,res) => {
+var userId = req.params.id
+var matchID = req.body.id
+console.log(userId,matchID)
+
+/*
+    const user = await userModel.findOne({_id: req.params.id});
+    const otherUser = await userModel.findOne({_id: req.body._id});
+
+    var userMatches = user.matches;
+    var userLikes = user.likes;
+    console.log(userMatches, userLikes)
+*/
+  userModel.updateOne({_id: req.params.id}, {$pull: {matches: {$in: req.body.id}}})
+  .then(res.send("hej"));
+ }
+
+
+
+//jeg skal bruge likes for bruger jeg er logget ind med 
+// jeg skal bruge matches for match(x) og for bruger der er logget ind 
+
+/* 
+ for(i=0; i < user.likes.length; i++) {
+
+      if(user.likes[i] = req.body.deleteMatch) {
+
+        user.likes.splice(i, 1);
+
+      }
+
+    }
+
+    for(i=0; i < user.matches.length; i++) {
+
+      if(user.matches[i] = req.body.deleteMatch) {
+
+        user.matches.splice(i, 1);
+
+      }
+
+    } user.updateOne({_id: req.params.id, $set: user});
+
+    if(otherUser) {
+
+      for(i=0; i < otherUser.matches.length; i++) {
+
+        if(otherUser.matches[i] = req.params.id) {
   
+          otherUser.matches.splice(i, 1);
+  
+        }
+  
+      }
+
+    } otherUser.updateOne({_id: req.body.deleteMatch, $set: otherUser})
+
+    res.status(200).json({"newMatches": user.matches});
+
+  } 
+}
+
+
+    for(i=0; i < user.matches.length; i++) {
+
+      if(user.matches[i] = req.body.id) {
+
+        userModel.update({_id: req.params.id}, {matches: splice(i, 1)});
+
+      }
+
+    }
+    for(i=0; i < user.likes.length; i++) {
+
+      if(user.likes[i] = req.body.id) {
+
+        user.likes.splice(i, 1);
+
+      }
+
+    }
+
+
+
   userModel.findOne({_id: req.params.id})
   .then (userModel_id => {
     userModel.find({_id: {$in: userModel_id.matches}})
@@ -154,13 +260,16 @@ exports.matches = (req,res) => {
         });
         });
   });
-};
+ };
 
+    
 
+    //await userModel.find({_id: {$in: userMatch.matches}}) // de matches jeg vil vise 
 
+     //const matches = userMatch.matches;
+     //console.log(matches)
+     //usermatch er den rigtige bruger, jeg vil gerne have vist denne brugers matches 
 
-
-  /*
   if (req.body.matches != undefined){
 
   var userMatch = await userModel.findOne({_id: req.params.id}) //bruger hvis matches jeg vil finde/vise 
@@ -176,9 +285,9 @@ exports.matches = (req,res) => {
   console.log(users,matches)
   res.render("matches.ejs", {users: users}, {matches: matches});
     
-} catch (err) {
+  } catch (err) {
   res.status(404).send('No matches')
-}
+ }
   }  }
   //var user = req.params.id;
   // var matches = userModel.find({_id: {$in: userModel.matches}})
@@ -191,18 +300,17 @@ exports.matches = (req,res) => {
        //   error: err 
     //    })
     //})
-//} 
+ //} 
  
-/*
-})
-if (err){
+
+  })
+ if (err){
   console.log(err)
-}
-else {
+ }
+ else {
   res.status(200).render("../Views/matches.ejs", )
-}
-*/
-//userModel.updateOne({_id: req.params.id}, {$addToSet: {"matches": secondId}})
+ }
+ //userModel.updateOne({_id: req.params.id}, {$addToSet: {"matches": secondId}})
 
   //req.paras.ID er burger 1' ID
   //secondID bruger 1 likes 
@@ -217,11 +325,11 @@ else {
  //var userArray = req.body.userArray.split(",");
   //var secondArray = like.likes.split(", "); 
 
-// 
+ 
 
 
 
-  /*
+
     if (req.body.like != undefined){
       console.log("bruger liket")
       userModel.find({email: req.body.email})
@@ -257,4 +365,4 @@ else {
         } else if (req.body.dislike != undefined){
       console.log("Bruger disliked");
     }  
-  */
+*/
