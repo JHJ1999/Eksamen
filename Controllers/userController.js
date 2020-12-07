@@ -1,173 +1,197 @@
 const userModel = require("../Model/User");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-
-exports.login = (req,res) => {
-    if(req.body!=null){
-      userModel.find({email:req.body.email})
-      .then(users => {
-        if(users.length < 1){
+exports.login = (req, res) => {
+  if (req.body != null) {
+    userModel
+      .find({ email: req.body.email })
+      .then((users) => {
+        if (users.length < 1) {
           res.send("No user found");
-        } // tjekker om det er admin- eller user login 
-        if(users[0].role==req.body.role && users[0].password==req.body.password){
-          if(users[0].role == "admin") {
-            userModel.find({role: "user"}) //henter liste af users til admin side
-            .then(allUsers => {
-              res.status(200).render("homepage.ejs", {admin: users[0], allUsers: allUsers});
-            })
-            .catch( err => {
-              res.status(500).json({
-                  error: err
-            })
-        });
-        }
-  
-        else if (users[0].role == "user") {
-            userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke viser sin egen bruger som et muligt match 
-            .then (userList => {
-              var randomUser = Math.floor(Math.random() * (userList.length));
-              res.status(200).render("homepage.ejs", {user: users[0], userList: userList[randomUser]}); //for at vise tilfældige users 
-              //req.session.user = user;
-            }) 
-        } 
-          else {
+        } // tjekker om det er admin- eller user login
+        if (
+          users[0].role == req.body.role &&
+          users[0].password == req.body.password
+        ) {
+          if (users[0].role == "admin") {
+            userModel
+              .find({ role: "user" }) //henter liste af users til admin side
+              .then((allUsers) => {
+                res
+                  .status(200)
+                  .render("homepage.ejs", {
+                    admin: users[0],
+                    allUsers: allUsers,
+                  });
+              })
+              .catch((err) => {
+                res.status(500).json({
+                  error: err,
+                });
+              });
+          } else if (users[0].role == "user") {
+            userModel
+              .find({ email: { $ne: req.body.email } }) //ne (not equal) til brugerens email, så man ikke viser sin egen bruger som et muligt match
+              .then((userList) => {
+                var randomUser = Math.floor(Math.random() * userList.length); 
+                res
+                  .status(200)
+                  .render("homepage.ejs", {
+                    user: users[0],
+                    userList: userList[randomUser],
+                  }); //for at vise tilfældige users
+              });
+          } else {
             res.status(200).json(users[0]);
           }
-         
-        } 
-          else {
-          res.status(403).json({message: "unauthorised"})
-          }
-      })
-          .catch(err => {
-        if (err){
-          res.status(500).json({error: err})
         } else {
-          res.status(404).json({error: "error"})
+          res.status(403).json({ message: "unauthorised" });
         }
-      });
-  
-    }
-}
-
-exports.signup = (req, res) => { 
-    console.log(req.body.name);
-      const newUser = new userModel({
-
-        role: "user",
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        age: req.body.age,
-        gender: req.body.gender,
-        preferredGender: req.body.preferredGender,
-        interest: req.body.interest,
-        likes: [],
-        matches: []
-      });
-    
-         newUser.save()
-        .then(user =>{
-          
-        userModel.find({email : {$ne: req.body.email}}) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match 
-        .then (userList => {
-            res.status(200).render("../Views/homepage.ejs", {user: user, userList: userList});
-          })
-          .catch(err =>{
-            res.status(404).json({error: err})
-          })
       })
-        .catch(err =>
-        res.status(500).json({error: err}));
-}
+      .catch((err) => {
+        if (err) {
+          res.status(500).json({ error: err });
+        } else {
+          res.status(404).json({ error: "error" });
+        };
+      });
+  };
+};
 
+exports.signup = (req, res) => {
+  const newUser = new userModel({
+    role: "user",
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    age: req.body.age,
+    gender: req.body.gender,
+    preferredGender: req.body.preferredGender,
+    interest: req.body.interest,
+    likes: [],
+    matches: [],
+  });
 
-exports.delete = (req,res) => {
-    userModel
-     .findByIdAndRemove(req.body.id)
-     .exec()
-     .then(doc => {
-     if (!doc) {return res.status(404).end(); }
-     return res.status(200).render("index.ejs");
-     })   //ellers 204.end()
-     .catch(err => next(err));
-}
+  newUser
+    .save()
+    .then((user) => {
+      userModel
+        .find({ email: { $ne: req.body.email } }) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match
+        .then((userList) => {
+          res
+            .status(200)
+            .render("../Views/homepage.ejs", {
+              user: user,
+              userList: userList,
+            });
+        })
+        .catch((err) => {
+          res.status(404).json({ error: err });
+        });
+    })
+    .catch((err) => res.status(500).json({ error: err }));
+};
 
-exports.update = (req,res) => {
-    var updateUser = {
-      name: req.body.name,
-      email: req.body.email,
-      age: req.body.age,
-      gender: req.body.gender,
-      preferredGender: req.body.preferredGender,
-      interest: req.body.interest
-    }
-    userModel.updateOne({_id: req.body._id}, {$set: updateUser})
-    .then(result =>{
-     res.render("index.ejs", result);
-    }) 
-    .catch( err => {
-     res.status(500).json({
-         error: err 
-       })
-   })
-}
+exports.delete = (req, res) => {
+  userModel
+    .findByIdAndRemove(req.body.id)
+    .exec()
+    .then((doc) => {
+      if (!doc) {
+        return res.status(404).end();
+      };
+      return res.status(200).render("index.ejs");
+    }) //ellers 204.end()
+    .catch((err) => next(err));
+};
 
+exports.update = (req, res) => {
+  var updateUser = {
+    name: req.body.name,
+    email: req.body.email,
+    age: req.body.age,
+    gender: req.body.gender,
+    preferredGender: req.body.preferredGender,
+    interest: req.body.interest,
+  };
+  userModel
+    .updateOne({ _id: req.body._id }, { $set: updateUser })
+    .then((result) => {
+      res.render("index.ejs", result);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
 
-exports.likes = async (req,res) => {
-
+exports.likes = async (req, res) => {
   var secondId = req.body.second_id;
   var userArray = req.body.second_id;
 
-  if (req.body.like != undefined){
+  if (req.body.like != undefined) {
+    await userModel.updateOne(
+      { _id: req.params.id },
+      { $addToSet: { likes: secondId } }
+    ); //addToSet tilskriver kun ID'et, hvis det ikke allerede er i arrayet.
 
-  
-    await userModel.updateOne({_id: req.params.id}, {$addToSet: {"likes": secondId}})  //addToSet tilskriver kun ID'et, hvis det ikke allerede er i arrayet.
-    
-    const like = await userModel.findOne(({_id: secondId}))                          
-     
-      //console.log(req.params.id, secondId, userArray, like.likes) 
-      if (userArray.includes(secondId) && like.likes.includes(req.params.id)) {
-        res.send("");
-        console.log("match")
+    const like = await userModel.findOne({ _id: secondId });
 
-        await userModel.updateOne({_id: req.params.id}, {$addToSet: {"matches": secondId}})
-        
-      } else console.log("no match")
-       res.status(200);
-  } 
-}
+    await userModel.updateOne(
+      { _id: req.params.id },
+      { $addToSet: { matches: secondId } }
+    );
 
-exports.matches = async (req,res) => {
+    if (userArray.includes(secondId) && like.likes.includes(req.params.id)) {
+      res.status(200).send("It's a match"); //indlæse samme side
+      console.log("match");
+    } else console.log("no match");
+    res.status(200).send("It's not a match");
+  };
+};
 
+exports.matches = async (req, res) => {
   var userMatches = [];
 
   if (req.body.matches != undefined) {
+    const myUser = await userModel.findOne({ _id: req.params.id }); //bruger hvis matches jeg vil finde/vise
 
-    const myUser = await userModel.findOne({_id: req.params.id}) //bruger hvis matches jeg vil finde/vise 
-
-    if(myUser) {
-
-      
-
+    if (myUser) {
       userMatches = myUser.matches;
-
     }
-    const matches = await userModel.find({_id: {$in: userMatches}})
-    
+    const matches = await userModel.find({ _id: { $in: userMatches } }); //finder id's i usermatches
 
-    res.render('matches.ejs', {"matches" : matches, "userMatches" : userMatches, "myUser" : myUser})
+    res.render("matches.ejs", {
+      matches: matches,
+      userMatches: userMatches,
+      myUser: myUser,
+    });
+  } else console.log("virker ikke");
+  res.status(200);
+};
 
 
-  } else console.log("virker ikke")
-    res.status(200);
-}
-//myUser er ID'et for personen der er logget ind, og som skal have slettet/vist sine matches
-//matches er brugeren som er logget ind's matches
-exports.matchesDelete = (req,res) => {
-var userId = req.params.id
-var matchID = req.body.id
-console.log(userId,matchID)
+exports.matchesDelete = async (req, res) => {
+  var userId = req.params.id;
+  var matchID = req.body.id;
+  console.log(userId, matchID);
+
+  await userModel.updateOne(
+    { _id: req.body.id },
+    { $pull: { matches: { $in: req.params.id } } }
+  );
+  await userModel.updateOne(
+    { _id: req.params.id },
+    { $pull: { likes: { $in: req.body.id } } }
+  );
+  await userModel
+    .updateOne(
+      { _id: req.params.id },
+      { $pull: { matches: { $in: req.body.id } } }
+    )
+    .then(res.send("Match fjernet"));
+};
 
 /*
     const user = await userModel.findOne({_id: req.params.id});
@@ -177,14 +201,9 @@ console.log(userId,matchID)
     var userLikes = user.likes;
     console.log(userMatches, userLikes)
 */
-  userModel.updateOne({_id: req.params.id}, {$pull: {matches: {$in: req.body.id}}})
-  .then(res.send("hej"));
- }
 
-
-
-//jeg skal bruge likes for bruger jeg er logget ind med 
-// jeg skal bruge matches for match(x) og for bruger der er logget ind 
+//jeg skal bruge likes for bruger jeg er logget ind med
+// jeg skal bruge matches for match(x) og for bruger der er logget ind
 
 /* 
  for(i=0; i < user.likes.length; i++) {

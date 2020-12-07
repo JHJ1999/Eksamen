@@ -38,7 +38,6 @@ app.use(session({
   cookie:{ expires:700000 }
 }));
 
-//forkert placering af req.session.user 
  app.get('/', (req,res) => {
   res.render("index.ejs");
  });
@@ -47,19 +46,3 @@ app.use(session({
   console.log(`App kører på http://localhost:${port}`)
 })
 
-
-
-
-
-/*
-module.exports.delete = (req,res) => {
-  userModel
-   .findByIdAndRemove(req.body.id)
-   .exec()
-   .then(doc => {
-   if (!doc) {return res.status(404).end(); }
-   return res.status(200).render("index.ejs");
-   })   //ellers 204.end()
-   .catch(err => next(err));
-}
-*/

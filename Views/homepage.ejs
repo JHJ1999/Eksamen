@@ -117,7 +117,7 @@
                     <h2><%= userList.name%></h2>
 
                 <ul>
-                    <li> Name: <%userList.name%> </li>
+                    <li> Name: <%=userList.name%> </li>
 
                     <li> Age: <%=userList.age%> </li>
 
@@ -127,7 +127,7 @@
                 </ul>
 
                     
-                    <input type="text" name="second_id" value="<%=userList._id %>">
+                    <input type="text" name="second_id" value="<%=userList._id %>" style="display: none;">
                     
                     <input type="text" name="userArray" value="<%=user.likes %>" style="display: none;">
                     
@@ -151,7 +151,7 @@
     
             
 
-                <input type="text" name="userMatches" value="<%=user._id %>">
+                <input type="text" name="userMatches" value="<%=user._id %>" style="display: none;">
                 <button name="matches" type="submit" class="matches"> Mine matches</button>
             </form>
         <br>
