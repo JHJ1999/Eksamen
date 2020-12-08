@@ -17,12 +17,10 @@ exports.login = (req, res) => {
             userModel
               .find({ role: "user" }) //henter liste af users til admin side
               .then((allUsers) => {
-                res
-                  .status(200)
-                  .render("homepage.ejs", {
-                    admin: users[0],
-                    allUsers: allUsers,
-                  });
+                res.status(200).render("homepage.ejs", {
+                  admin: users[0],
+                  allUsers: allUsers,
+                });
               })
               .catch((err) => {
                 res.status(500).json({
@@ -33,13 +31,11 @@ exports.login = (req, res) => {
             userModel
               .find({ email: { $ne: req.body.email } }) //ne (not equal) til brugerens email, så man ikke viser sin egen bruger som et muligt match
               .then((userList) => {
-                var randomUser = Math.floor(Math.random() * userList.length); 
-                res
-                  .status(200)
-                  .render("homepage.ejs", {
-                    user: users[0],
-                    userList: userList[randomUser],
-                  }); //for at vise tilfældige users
+                var randomUser = Math.floor(Math.random() * userList.length);
+                res.status(200).render("homepage.ejs", {
+                  user: users[0],
+                  userList: userList[randomUser],
+                }); //for at vise tilfældige users
               });
           } else {
             res.status(200).json(users[0]);
@@ -53,9 +49,9 @@ exports.login = (req, res) => {
           res.status(500).json({ error: err });
         } else {
           res.status(404).json({ error: "error" });
-        };
+        }
       });
-  };
+  }
 };
 
 exports.signup = (req, res) => {
@@ -78,12 +74,11 @@ exports.signup = (req, res) => {
       userModel
         .find({ email: { $ne: req.body.email } }) //ne (not equal) til brugerens email, så man ikke får vist sin egen bruger som et muligt match
         .then((userList) => {
-          res
-            .status(200)
-            .render("../Views/homepage.ejs", {
-              user: user,
-              userList: userList,
-            });
+          var randomUser = Math.floor(Math.random() * userList.length);
+          res.status(200).render("homepage.ejs", {
+            user: user,
+            userList: userList[randomUser],
+          }); //for at vise tilfældige users
         })
         .catch((err) => {
           res.status(404).json({ error: err });
@@ -99,7 +94,7 @@ exports.delete = (req, res) => {
     .then((doc) => {
       if (!doc) {
         return res.status(404).end();
-      };
+      }
       return res.status(200).render("index.ejs");
     }) //ellers 204.end()
     .catch((err) => next(err));
@@ -148,7 +143,7 @@ exports.likes = async (req, res) => {
       console.log("match");
     } else console.log("no match");
     res.status(200).send("It's not a match");
-  };
+  }
 };
 
 exports.matches = async (req, res) => {
@@ -170,7 +165,6 @@ exports.matches = async (req, res) => {
   } else console.log("virker ikke");
   res.status(200);
 };
-
 
 exports.matchesDelete = async (req, res) => {
   var userId = req.params.id;

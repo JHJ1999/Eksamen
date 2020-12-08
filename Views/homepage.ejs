@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="styles2.css">
-
-    <!--
-    <script type = "text/javascript" >
-        function preventBack(){window.history.forward();}
-         setTimeout("preventBack()", 0);
-         window.onunload=function(){null};
-     </script> Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete-->
+    <!-- <script type= "text/javascript">
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+        });
+    </script> Forhindrer at man kan bruge tilbage pil til at genindlæse efter logud/delete. Fra stackoverflow-->
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

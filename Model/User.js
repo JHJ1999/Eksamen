@@ -19,17 +19,3 @@ const userModel = mongoose.model('User', userSchema);
 
 module.exports = userModel;
 
-
-
-
-
-
-
-
-
-
-//_id: 'mongoose.Schema.Types.ObjectId',
-/*<input type="text" name="name" value='<%=userList.name%>' style="display: none;">
-                    <input type="text" name="email" value='<%=userList.email%>' style="display: none;">
-                    <input type="text" name="age" value='<%=userList.age%>' style="display: none;">
-                    <input type="text" name="interest" value='<%=userList.interest%>' style="display: none;"> */
